@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class CheckoutViewController: UIViewController {
+final class CheckoutViewController: UIViewController {
     private let viewModel: CheckoutViewModel
 
     private let disposeBag = DisposeBag()

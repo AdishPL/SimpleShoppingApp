@@ -13,7 +13,7 @@ enum CurrencyServiceError: Error {
     case invalidCurrencyCode(String)
 }
 
-protocol CurrencyServiceProtocol {
+protocol CurrencyServiceProtocol: CurrencyFormattable {
     func getExchangeRate(for currency: CurrencyCode) -> Observable<Double>
     func getAvailableCurrencyCodes() -> Observable<[CurrencyCode]>
 }

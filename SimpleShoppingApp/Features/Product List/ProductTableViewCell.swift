@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class ProductTableViewCell: UITableViewCell {
+final class ProductTableViewCell: UITableViewCell {
     private(set) var disposeBag = DisposeBag()
 
     private let productNameLabel: UILabel = {
@@ -69,9 +69,9 @@ class ProductTableViewCell: UITableViewCell {
     }
 
     func configure(with product: Product,
-                   currencyFormatter: @escaping (Double, String) -> String) {
+                   currencyFormatter: @escaping (Double) -> String) {
         productNameLabel.text = product.name
-        productPricingLabel.text = currencyFormatter(product.price, "USD") + " \(product.quantityDescription)"
+        productPricingLabel.text = currencyFormatter(product.price) + " \(product.quantityDescription)"
     }
 
     func bind(isInBasket: Observable<Bool>) {

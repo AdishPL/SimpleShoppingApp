@@ -26,6 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func makeProductListViewController() -> ProductListViewController {
         let viewModel = ProductListViewModel(
+            currencyService: CurrencyServiceFromFile(),
             productService: ProductServiceFromFile(),
             shoppingBasket: GlobalShoppingBasket()
         )

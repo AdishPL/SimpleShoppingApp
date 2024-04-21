@@ -9,11 +9,10 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ProductListViewController: UIViewController {
+final class ProductListViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: ProductListViewModel
 
-    // UI Elements
     private let productTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "ProductCell")
@@ -61,7 +60,7 @@ class ProductListViewController: UIViewController {
             productTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             productTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             productTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            productTableView.bottomAnchor.constraint(equalTo: checkoutButton.topAnchor, constant: -16) // Spacing
+            productTableView.bottomAnchor.constraint(equalTo: checkoutButton.topAnchor, constant: -16)
         ])
 
         checkoutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -78,7 +77,13 @@ class ProductListViewController: UIViewController {
     }
 
     private func configureCell(_ cell: ProductTableViewCell, with product: Product) {
-        cell.configure(with: product, currencyFormatter: viewModel.formatCurrency)
+        cell.configure(with: product,
+                       currencyFormatter: { [weak self] price in
+            guard let self = self else { return "" }
+
+            return self.viewModel.currencyService.formatCurrency(value: price, code: "USD")
+        })
+
         bindActions(to: cell, with: product)
         bindBasketState(to: cell, with: product)
     }

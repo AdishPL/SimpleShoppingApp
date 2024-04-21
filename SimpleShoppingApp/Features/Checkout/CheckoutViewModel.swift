@@ -7,7 +7,7 @@
 
 import RxSwift
 
-class CheckoutViewModel: CurrencyFormattable {
+final class CheckoutViewModel {
     let currencyService: CurrencyServiceProtocol
     private let shoppingBasket: ShoppingBasketProtocol
     private let disposeBag = DisposeBag()

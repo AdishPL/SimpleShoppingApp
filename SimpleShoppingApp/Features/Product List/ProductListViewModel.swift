@@ -7,7 +7,8 @@
 
 import RxSwift
 
-class ProductListViewModel: CurrencyFormattable {
+final class ProductListViewModel {
+    let currencyService: CurrencyServiceProtocol
     private let productService: ProductServiceProtocol
     private let shoppingBasket: ShoppingBasketProtocol
     private let disposeBag = DisposeBag()
@@ -21,8 +22,10 @@ class ProductListViewModel: CurrencyFormattable {
     let addItem = PublishSubject<Product>()
     let removeItem = PublishSubject<Product>()
 
-    init(productService: ProductServiceProtocol,
+    init(currencyService: CurrencyServiceProtocol,
+         productService: ProductServiceProtocol,
          shoppingBasket: ShoppingBasketProtocol) {
+        self.currencyService = currencyService
         self.productService = productService
         self.shoppingBasket = shoppingBasket
 
@@ -30,7 +33,7 @@ class ProductListViewModel: CurrencyFormattable {
 
         // Update the basket total whenever the basket changes
         shoppingBasket.total
-            .map { self.formatCurrency(value: $0, code: "USD") } // Format as USD
+            .map { currencyService.formatCurrency(value: $0, code: "USD") } // Format as USD
             .subscribe(onNext: { [weak self] formattedValue in
                 self?.basketTotal.onNext(formattedValue) // Update the observable
             })
@@ -73,7 +76,7 @@ class ProductListViewModel: CurrencyFormattable {
 
     private func createCheckoutViewController() -> CheckoutViewController {
         let viewModel = CheckoutViewModel(
-            currencyService: CurrencyServiceFromFile(),
+            currencyService: currencyService,
             shoppingBasket: shoppingBasket)
 
         return CheckoutViewController(viewModel: viewModel)
