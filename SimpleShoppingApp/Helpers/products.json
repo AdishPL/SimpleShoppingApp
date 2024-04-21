@@ -1,0 +1,12 @@
+[
+    {"name":"Potato", "price":0.95, "quantityDescription": "per bag"},
+    {"name":"Eggs", "price":2.10, "quantityDescription": "per dozen"},
+    {"name":"Milk", "price":1.30, "quantityDescription": "per bottle"},
+    {"name":"Banana", "price":0.73, "quantityDescription": "per kg"},
+    {"name":"Whole Wheat Bread", "price":2.49, "quantityDescription": "per each"},
+    {"name":"Orange Juice", "price":3.99, "quantityDescription": "per bottle"},
+    {"name":"Apples", "price":1.50, "quantityDescription": "per kg"},
+    {"name":"Tomatoes", "price":1.20, "quantityDescription": "per kg"},
+    {"name":"Chicken Breast", "price":5.55, "quantityDescription": "per kg"},
+    {"name":"Ground Beef", "price":4.75, "quantityDescription": "per kg"}
+]
