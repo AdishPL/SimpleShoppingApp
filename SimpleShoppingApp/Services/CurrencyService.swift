@@ -24,7 +24,7 @@ class CurrencyServiceFromFile: CurrencyServiceProtocol {
     private(set) var baseCurrency: CurrencyCode = CurrencyCode(baseCurrency: "USD")  // Default to USD
 
     private func getRates() -> Observable<[CurrencyCode: Double]> {
-        if let cachedQuotes = self.cachedQuotes {
+        if let cachedQuotes = cachedQuotes {
             return .just(cachedQuotes)
         } else if let fetchObservable = self.fetchRatesObservable {
             return fetchObservable
@@ -60,11 +60,11 @@ class CurrencyServiceFromFile: CurrencyServiceProtocol {
     }
 
     private func fetchExchangeRates() -> Observable<[CurrencyCode: Double]> {
-        return Observable.create { observer in
-            if let data = self.loadJSONData(filename: "rates"),
-               let response = self.parseExchangeRates(data: data),
+        return Observable.create { [weak self] observer in
+            if let data = self?.loadJSONData(filename: "rates"),
+               let response = self?.parseExchangeRates(data: data),
                response.success {
-                self.baseCurrency = CurrencyCode(baseCurrency: response.source)  // Set the base currency from source
+                self?.baseCurrency = CurrencyCode(baseCurrency: response.source)  // Set the base currency from source
                 let quotes = response.quotes
                 observer.onNext(quotes)
                 observer.onCompleted()
