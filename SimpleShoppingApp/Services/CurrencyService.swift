@@ -21,7 +21,7 @@ protocol CurrencyServiceProtocol: CurrencyFormattable {
 class CurrencyServiceFromFile: CurrencyServiceProtocol {
     private var cachedQuotes: [CurrencyCode: Double]?  // Cache the last fetched rates
     private var fetchRatesObservable: Observable<[CurrencyCode: Double]>?
-    private var baseCurrency: CurrencyCode = CurrencyCode(baseCurrency: "USD")  // Default to USD
+    private(set) var baseCurrency: CurrencyCode = CurrencyCode(baseCurrency: "USD")  // Default to USD
 
     private func getRates() -> Observable<[CurrencyCode: Double]> {
         if let cachedQuotes = self.cachedQuotes {

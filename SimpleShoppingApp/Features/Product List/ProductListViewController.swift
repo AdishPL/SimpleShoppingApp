@@ -81,7 +81,7 @@ final class ProductListViewController: UIViewController {
                        currencyFormatter: { [weak self] price in
             guard let self = self else { return "" }
 
-            return self.viewModel.currencyService.formatCurrency(value: price, code: "USD")
+            return self.viewModel.currencyService.formatCurrency(value: price)
         })
 
         bindActions(to: cell, with: product)

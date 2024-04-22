@@ -30,12 +30,23 @@ final class ProductListViewModel {
         self.shoppingBasket = shoppingBasket
 
         fetchProducts()
+        setupBindings()
+    }
 
+    private func fetchProducts() {
+        productService.getProducts()
+            .subscribe(onNext: { [weak self] products in
+                self?.products.onNext(products)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupBindings() {
         // Update the basket total whenever the basket changes
         shoppingBasket.total
-            .map { currencyService.formatCurrency(value: $0, code: "USD") } // Format as USD
+            .map { [unowned self] in self.currencyService.formatCurrency(value: $0) } // Format as USD
             .subscribe(onNext: { [weak self] formattedValue in
-                self?.basketTotal.onNext(formattedValue) // Update the observable
+                self?.basketTotal.onNext(formattedValue)
             })
             .disposed(by: disposeBag)
 
@@ -48,14 +59,6 @@ final class ProductListViewModel {
         }).disposed(by: disposeBag)
     }
 
-    private func fetchProducts() {
-        productService.getProducts()
-            .subscribe(onNext: { [weak self] products in
-                self?.products.onNext(products)
-            })
-            .disposed(by: disposeBag)
-    }
-
     func addItemToBasket(product: Product) {
         shoppingBasket.addItem(product: product)
     }
@@ -66,7 +69,7 @@ final class ProductListViewModel {
 
     func isInBasket(product: Product) -> Observable<Bool> {
         return shoppingBasket.items.map { basketItems in
-            basketItems.contains(where: { $0.product.name == product.name }) // Check by product ID
+            basketItems.contains(where: { $0.product.name == product.name }) // Check by product name
         }
     }
 

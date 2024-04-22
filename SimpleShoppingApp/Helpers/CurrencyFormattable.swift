@@ -8,7 +8,8 @@
 import Foundation
 
 protocol CurrencyFormattable {
-    func formatCurrency(value: Double, code: String) -> String
+    func formatCurrency(value: Double, code: String?) -> String
+    var baseCurrency: CurrencyCode { get }
 }
 
 extension CurrencyFormattable {
@@ -18,16 +19,22 @@ extension CurrencyFormattable {
         return formatter
     }
 
-    func formatCurrency(value: Double, code: String) -> String {
-        currencyFormatter.currencyCode = code
+    /// Format into readable price format
+    /// - Parameters:
+    ///   - value: Actual price
+    ///   - code: Currency code (e.g. USD). If empty base currency will be used
+    /// - Returns: Formatted price
+    func formatCurrency(value: Double, code: String? = nil) -> String {
+        let currencyCode = code ?? baseCurrency.code
 
-        // Optional: Set locale for region-specific formatting
-        // formatter.locale = Locale(identifier: "fr_FR") // Example: French
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
 
-        if let formattedString = currencyFormatter.string(from: NSNumber(value: value)) {
+        if let formattedString = formatter.string(from: NSNumber(value: value)) {
             return formattedString
         } else {
-            return "\(code) \(value)"  // Fallback if formatting fails
+            return "\(currencyCode) \(value)"  // Fallback if formatting fails
         }
     }
 }

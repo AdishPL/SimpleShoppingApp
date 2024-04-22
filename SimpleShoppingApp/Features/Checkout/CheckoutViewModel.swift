@@ -28,7 +28,7 @@ final class CheckoutViewModel {
         // Set up binding to reactively calculate total price upon any changes in total or currency
         setupTotalPriceBinding()
     }
-
+    
     private func setupTotalPriceBinding() {
         Observable.combineLatest(shoppingBasket.total, selectedCurrency)
             .flatMapLatest { [weak self] total, currencyCode -> Observable<String> in
@@ -36,7 +36,8 @@ final class CheckoutViewModel {
                 return self.currencyService.getExchangeRate(for: currencyCode)
                     .map { rate in
                         let totalInCurrency = total * rate
-                        return "\(totalInCurrency) \(currencyCode.code)"
+                        // Format the total using the CurrencyFormattable implementation.
+                        return self.currencyService.formatCurrency(value: totalInCurrency, code: currencyCode.code)
                     }
             }
             .bind(to: totalPrice)
